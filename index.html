@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Web App</title>
+  <style>
+    :root {
+      --bg-color: #f8f9fa;
+      --text-color: #333;
+      --primary-color: #007BFF;
+      --button-bg: #007BFF;
+      --button-hover: #0056b3;
+      --job-bg: #28a745;
+      --job-hover: #218838;
+    }
+    body.dark {
+      --bg-color: #1e1e1e;
+      --text-color: #e0e0e0;
+      --primary-color: #66b0ff;
+      --button-bg: #444;
+      --button-hover: #666;
+      --job-bg: #007b5e;
+      --job-hover: #005c45;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      text-align: center;
+      padding: 40px;
+      transition: all 0.3s ease;
+    }
+    h2 {
+      font-size: 28px;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    h3 {
+      font-size: 20px;
+      color: var(--text-color);
+      margin: 15px 0;
+    }
+    input {
+      padding: 10px;
+      width: 250px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: white;
+      color: #000;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 6px;
+      border: none;
+      background-color: var(--button-bg);
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: var(--button-hover);
+    }
+    .hidden {
+      display: none;
+    }
+    #successImage {
+      margin-top: 20px;
+      width: 300px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border: 2px solid var(--primary-color);
+    }
+    .job-button {
+      display: block;
+      margin: 20px auto;
+      padding: 20px 40px;
+      font-size: 20px;
+      border-radius: 10px;
+      background-color: var(--job-bg);
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+    }
+    .job-button:hover {
+      background-color: var(--job-hover);
+      transform: scale(1.05);
+    }
+    /* Toggle switch styling */
+    .toggle-container {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .toggle-label {
+      font-size: 14px;
+      margin-left: 8px;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      background-color: #ccc;
+      border-radius: 26px;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      transition: .4s;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      border-radius: 50%;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+    }
+    input:checked + .slider {
+      background-color: #2196F3;
+    }
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+    .slider.round {
+      border-radius: 34px;
+    }
+    
+    .company-item {
+      background-color: var(--button-bg);
+      color: white;
+      padding: 15px 25px;
+      margin: 10px auto;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 500;
+      max-width: 400px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .company-item:hover {
+      background-color: var(--button-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    
+    #message {
+      margin: 15px 0;
+      font-weight: 500;
+      min-height: 20px;
+    }
+    
+    .success {
+      color: #28a745;
+    }
+    
+    .error {
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+  <div class="toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="themeToggle" onclick="toggleTheme()">
+      <span class="slider round"></span>
+    </label>
+    <span class="toggle-label">Dark Mode</span>
+  </div>
+  <div id="loginContainer">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email"><br><br>
+    <input type="password" id="password" placeholder="Password"><br><br>
+    <button onclick="login()">Login</button>
+    <button onclick="logout()">Logout</button>
+    <p id="message"></p>
+    <img id="successImage" class="hidden" src="https://media.licdn.com/dms/image/v2/D560BAQHVETXqJTbwlQ/company-logo_400_400/company-logo_400_400/0/1722521290267/addit_solutions_pvt_ltd_logo?e=2147483647&v=beta&t=waDyngu_s_uEN_fCxtvgOkMeY7fvgpyzPA9JuJWNNKQ" alt="Welcome Image">
+    <br><br>
+    <button id="nextButton" class="hidden" onclick="goToNext()">Next</button>
+  </div>
+  <div id="jobContainer" class="hidden">
+    <h2>Job Search</h2>
+    <button id="searchJobs" onclick="showJobOptions()">Search Jobs</button>
+    <div id="jobOptions" class="hidden">
+      <button class="job-button" onclick="showCompanies('Project Manager')">Project Manager</button>
+      <button class="job-button" onclick="showCompanies('Scrum Master')">Scrum Master</button>
+      <button class="job-button" onclick="showCompanies('Project Coordinator')">Project Coordinator</button>
+    </div>
+  </div>
+  <div id="companiesContainer" class="hidden">
+    <h2 id="jobTitle"></h2>
+    <h3>Available Companies:</h3>
+    <div id="companiesList"></div>
+    <button onclick="goBackToJobs()">Back</button>
+  </div>
+
+  <script>
+    const userEmail = "youremail@example.com";
+    const userPassword = "1234";
+
+    // Array of random companies
+    const companies = [
+      "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix", "Tesla", 
+      "Adobe", "Salesforce", "Oracle", "IBM", "Intel", "NVIDIA", "Spotify",
+      "Uber", "Airbnb", "PayPal", "LinkedIn", "Twitter", "Snapchat",
+      "TCS", "Infosys", "Wipro", "HCL", "Accenture", "Cognizant", "Capgemini",
+      "Deloitte", "PwC", "EY", "KPMG", "McKinsey", "BCG", "Bain & Company"
+    ];
+
+    function getRandomCompanies() {
+      const shuffled = companies.sort(() => 0.5 - Math.random());
+      return shuffled.slice(0, 5);
+    }
+
+    function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      if (email === userEmail && password === userPassword) {
+        document.getElementById("message").innerText = "Login successful!";
+        document.getElementById("successImage").classList.remove("hidden");
+        document.getElementById("nextButton").classList.remove("hidden");
+      } else {
+        document.getElementById("message").innerText = "Invalid email or password.";
+        document.getElementById("successImage").classList.add("hidden");
+        document.getElementById("nextButton").classList.add("hidden");
+      }
+    }
+
+    function logout() {
+      document.getElementById("email").value = "";
+      document.getElementById("password").value = "";
+      document.getElementById("message").innerText = "Logged out.";
+      document.getElementById("successImage").classList.add("hidden");
+      document.getElementById("nextButton").classList.add("hidden");
+      document.getElementById("jobContainer").classList.add("hidden");
+      document.getElementById("companiesContainer").classList.add("hidden");
+      document.getElementById("loginContainer").classList.remove("hidden");
+      document.getElementById("jobOptions").classList.add("hidden");
+    }
+
+    function goToNext() {
+      document.getElementById("loginContainer").classList.add("hidden");
+      document.getElementById("jobContainer").classList.remove("hidden");
+    }
+
+    function showJobOptions() {
+      document.getElementById("jobOptions").classList.remove("hidden");
+    }
+
+    function showCompanies(jobRole) {
+      // Hide job container
+      document.getElementById("jobContainer").classList.add("hidden");
+      
+      // Show companies container
+      document.getElementById("companiesContainer").classList.remove("hidden");
+      
+      // Set job title
+      document.getElementById("jobTitle").innerText = jobRole + " Positions";
+      
+      // Get 5 random companies
+      const randomCompanies = getRandomCompanies();
+      
+      // Display companies
+      const companiesList = document.getElementById("companiesList");
+      companiesList.innerHTML = "";
+      
+      randomCompanies.forEach(company => {
+        const companyDiv = document.createElement("div");
+        companyDiv.className = "company-item";
+        companyDiv.innerText = company;
+        companyDiv.onclick = () => selectCompany(company, jobRole);
+        companiesList.appendChild(companyDiv);
+      });
+    }
+
+    function selectCompany(company, jobRole) {
+      alert(`You selected ${company} for ${jobRole} position!`);
+    }
+
+    function goBackToJobs() {
+      document.getElementById("companiesContainer").classList.add("hidden");
+      document.getElementById("jobContainer").classList.remove("hidden");
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+    }
+
+    // Enter key support for login
+    document.addEventListener('DOMContentLoaded', function() {
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      
+      emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          login();
+        }
+      });
+      
+      passwordInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          login();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
